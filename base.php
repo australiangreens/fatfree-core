@@ -2648,12 +2648,21 @@ final class Base extends Prefab implements ArrayAccess {
 		if (!headers_sent() && session_status()!=PHP_SESSION_ACTIVE) {
 			unset($jar['expire']);
 			session_cache_limiter('');
-			if (version_compare(PHP_VERSION, '7.3.0') >= 0)
-				session_set_cookie_params($jar);
-			else {
-				unset($jar['samesite']);
-				call_user_func_array('session_set_cookie_params',$jar);
-			}
+      // australiangreens change: Only set cookie parameters if the domain
+      // hasn't already been set. This resolves a problem in some situations
+      // when running inside a Drupal module, where the different domain is
+      // chosen (without a dot at front) resulting in an extra cookie that
+      // causes all sorts of problems.
+      if (version_compare(PHP_VERSION, '7.3.0') >= 0) {
+        if (!session_get_cookie_params()['domain']) {
+          session_set_cookie_params($jar);
+        }
+      } else {
+        if (!call_user_func('session_get_cookie_params')['domain']) {
+          unset($jar['samesite']);
+          call_user_func_array('session_set_cookie_params',$jar);
+        }
+      }
 		}
 		if (PHP_SAPI=='cli-server' &&
 			preg_match('/^'.preg_quote($base,'/').'$/',$this->hive['URI']))
