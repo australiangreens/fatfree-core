@@ -260,11 +260,12 @@ class Mapper extends \DB\Cursor {
 			($options['limit'] || $options['offset'])) {
 			// order by pkey when no ordering option was given
 			if (!$options['order'])
-				foreach ($this->fields as $key=>$field)
+				foreach ($this->fields as $key=>$field) {
 					if ($field['pkey']) {
 						$order=' ORDER BY '.$db->quotekey($key);
 						break;
 					}
+        }
 			$ofs=$options['offset']?(int)$options['offset']:0;
 			$lmt=$options['limit']?(int)$options['limit']:0;
 			if (strncmp($db->version(),'11',2)>=0) {

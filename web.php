@@ -426,10 +426,11 @@ class Web extends Prefab {
 		$err='';
 		if (is_string($body)) {
 			$match=NULL;
-			foreach ($headers as $header)
+			foreach ($headers as $header) {
 				if (preg_match('/Content-Encoding: (.+)/i',$header,$match))
 					break;
-			if ($match)
+      }
+      if ($match)
 				switch ($match[1]) {
 					case 'gzip':
 						$body=gzdecode($body);
@@ -518,10 +519,11 @@ class Web extends Prefab {
 			$body=isset($html[1])?$html[1]:'';
 			$headers=array_merge($headers,$current=explode($eol,$html[0]));
 			$match=NULL;
-			foreach ($current as $header)
+			foreach ($current as $header) {
 				if (preg_match('/Content-Encoding: (.+)/i',$header,$match))
 					break;
-			if ($match)
+      }
+      if ($match)
 				switch ($match[1]) {
 					case 'gzip':
 						$body=gzdecode($body);

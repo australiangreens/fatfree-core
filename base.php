@@ -395,7 +395,7 @@ final class Base extends Prefab implements ArrayAccess {
 				$var=$this->hive;
 		}
 		$obj=FALSE;
-		foreach ($parts as $part)
+		foreach ($parts as $part) {
 			if ($part=='->')
 				$obj=TRUE;
 			elseif ($obj) {
@@ -419,6 +419,7 @@ final class Base extends Prefab implements ArrayAccess {
 					break;
 				}
 			}
+    }
 		return $var;
 	}
 
@@ -1076,11 +1077,6 @@ final class Base extends Prefab implements ArrayAccess {
 										if (isset($prop) &&
 											$cstm=!$int=($prop=='int'))
 											$currency_symbol=$prop;
-										if (!$cstm &&
-											function_exists('money_format') &&
-											version_compare(PHP_VERSION,'7.4.0')<0)
-											return money_format(
-												'%'.($int?'i':'n'),$args[$pos]);
 										$fmt=[
 											0=>'(nc)',1=>'(n c)',
 											2=>'(nc)',10=>'+nc',
@@ -1450,7 +1446,7 @@ final class Base extends Prefab implements ArrayAccess {
 		$loggable=$this->hive['LOGGABLE'];
 		if (!is_array($loggable))
 			$loggable=$this->split($loggable);
-		foreach ($loggable as $status)
+		foreach ($loggable as $status) {
 			if ($status=='*' ||
 				preg_match('/^'.preg_replace('/\D/','\d',$status).'$/',(string) $code)) {
 				error_log($text);
@@ -1459,7 +1455,8 @@ final class Base extends Prefab implements ArrayAccess {
 						error_log($nexus);
 				break;
 			}
-		if ($highlight=(!$this->hive['CLI'] && !$this->hive['AJAX'] &&
+    }
+    if ($highlight=(!$this->hive['CLI'] && !$this->hive['AJAX'] &&
 			$this->hive['HIGHLIGHT'] && is_file($css=__DIR__.'/'.self::CSS)))
 			$trace=$this->highlight($trace);
 		$this->hive['ERROR']=[
@@ -2442,9 +2439,6 @@ final class Base extends Prefab implements ArrayAccess {
 		if (extension_loaded('mbstring'))
 			mb_internal_encoding($charset);
 		ini_set('display_errors',0);
-		// Deprecated directives
-		@ini_set('magic_quotes_gpc',0);
-		@ini_set('register_globals',0);
 		// Intercept errors/exceptions; PHP5.3-compatible
 		if (PHP_VERSION_ID >= 80400) {
 			$check = error_reporting((E_ALL) & ~(E_NOTICE | E_USER_NOTICE));

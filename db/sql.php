@@ -410,10 +410,11 @@ class SQL {
 				$rows=[];
 				foreach ($this->exec($val[0],NULL) as $row)
 					if (!$fields || in_array($row[$val[1]],$fields)) {
-						foreach ($conv as $regex=>$type)
+						foreach ($conv as $regex=>$type) {
 							if (preg_match('/'.$regex.'/i',$row[$val[2]]))
 								break;
-						if (!isset($rows[$row[$val[1]]])) // handle duplicate rows in PgSQL
+            }
+            if (!isset($rows[$row[$val[1]]])) // handle duplicate rows in PgSQL
 							$rows[$row[$val[1]]]=[
 								'type'=>$row[$val[2]],
 								'pdo_type'=>$type,
@@ -506,11 +507,12 @@ class SQL {
 			'mssql|sqlsrv|odbc|sybase|dblib'=>'[]'
 		];
 		$use='';
-		foreach ($delims as $engine=>$delim)
+		foreach ($delims as $engine=>$delim) {
 			if (preg_match('/'.$engine.'/',$this->engine)) {
 				$use=$delim;
 				break;
 			}
+    }
 		return $use[0].($split ? implode($use[1].'.'.$use[0],explode('.',$key))
 			: $key).$use[1];
 	}
