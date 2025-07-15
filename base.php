@@ -1619,19 +1619,12 @@ final class Base extends Prefab implements ArrayAccess {
 
 	/**
 	*	Reroute to specified URI
-  *
-  * australiangreens change: 'never' as return type hint for function. In our
-  * scenario we are either using a custom handler that always dies, or we call
-  * $die will always be true. Either way the function will never return.
-  * Setting it here makes it possible for phpstan to properly trace branches, 
-  * particularly related to try/catch blocks
-  * 
 	*	@return NULL
 	*	@param $url array|string
 	*	@param $permanent bool
 	*	@param $die bool
 	**/
-	function reroute($url=NULL,$permanent=FALSE,$die=TRUE): never {
+	function reroute($url=NULL,$permanent=FALSE,$die=TRUE) {
 		if (!$url)
 			$url=$this->hive['REALM'];
 		if (is_array($url))
