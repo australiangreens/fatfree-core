@@ -1429,12 +1429,18 @@ final class Base extends Prefab implements ArrayAccess {
 	*	Log error; Execute ONERROR handler if defined, else display
 	*	default error page (HTML for synchronous requests, JSON string
 	*	for AJAX requests)
+  *
+  * australiangreens change: 'never' as return type hint for function. In our
+  * scenario we are always using a custom error handler which never returns.
+  * Setting it here makes it possible for phpstan to properly trace branches, 
+  * particularly related to try/catch blocks
+  * 
 	*	@param $code int
 	*	@param $text string
 	*	@param $trace array
 	*	@param $level int
 	**/
-	function error($code,$text='',?array $trace=NULL,$level=0) {
+	function error($code,$text='',?array $trace=NULL,$level=0): never {
 		$prior=$this->hive['ERROR'];
 		$header=$this->status($code);
 		$req=$this->hive['VERB'].' '.$this->hive['PATH'];
